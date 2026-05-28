@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOIR CLINIC — Estética de Outro Nível</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500&family=Italiana&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --neon-pink:#FF2D9B;
+  --neon-violet:#A020FF;
+  --neon-blue:#00F5FF;
+  --dark:#050508;
+  --dark2:#0A0A10;
+  --dark3:#0F0F18;
+  --white:#F0EEF8;
+  --muted:#6B6880;
+  --glow-pink:0 0 20px rgba(255,45,155,0.6),0 0 60px rgba(255,45,155,0.3),0 0 120px rgba(255,45,155,0.1);
+  --glow-violet:0 0 20px rgba(160,32,255,0.6),0 0 60px rgba(160,32,255,0.3);
+  --glow-blue:0 0 20px rgba(0,245,255,0.5),0 0 60px rgba(0,245,255,0.2);
+}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{background:var(--dark);color:var(--white);font-family:'Space Grotesk',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;}
+
+/* --- ESTILO DAS IMAGENS DOS CARDS NOIR --- */
+.card-image-container {
+    width: 100%;
+    height: 220px; 
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top; /* O SEGREDO: Corta o rodapé e foca no rosto/produto */
+    transition: transform 0.5s ease;
+}
+
+.proc-step:hover .card-img {
+    transform: scale(1.1); /* Efeito de zoom elegante no hover */
+}
+
+.proc-step.glass-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+/* ══════════════ CURSOR ══════════════ */
+#cur{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--neon-pink);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:var(--glow-pink);transition:transform .1s;}
+#cur-ring{position:fixed;width:40px;height:40px;border-radius:50%;border:1px solid var(--neon-violet);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .4s,height .4s,opacity .3s,border-color .3s;opacity:.5;}
+#cur-ring.big{width:70px;height:70px;opacity:.8;border-color:var(--neon-pink);}
+
+/* ══════════════ PRELOADER ══════════════ */
+#preloader{position:fixed;inset:0;background:var(--dark);z-index:9000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;transition:opacity .8s ease,transform .8s ease;}
+#preloader.out{opacity:0;pointer-events:none;}
+.pre-logo{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:8px;background:linear-gradient(135deg,var(--neon-pink),var(--neon-violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:pulse 1.5s ease infinite;}
+.pre-bar-wrap{width:200px;height:1px;background:rgba(160,32,255,.2);overflow:hidden;}
+.pre-bar{height:100%;background:linear-gradient(to right,var(--neon-pink),var(--neon-violet));width:0;animation:loadbar 2.2s ease forwards;}
+.pre-txt{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--muted);}
+@keyframes loadbar{to{width:100%}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* ══════════════ CANVAS BACKGROUND ══════════════ */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ══════════════ NAV ══════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:28px 64px;transition:all .5s;}
+nav.scrolled{background:rgba(5,5,8,.9);backdrop-filter:blur(20px);padding:18px 64px;border-bottom:1px solid rgba(255,45,155,.15);}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:6px;background:linear-gradient(135deg,var(--neon-pink),var(--neon-violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-links{display:flex;gap:40px;list-style:none;}
+.nav-links a {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #fff; /* Branco puro para dar leitura total */
+    text-decoration: none;
+    transition: 0.3s;
+    opacity: 0.8; /* Levemente suave para não brigar com o título */
+}
+
+.nav-links a:hover {
+    color: #ff00ff; /* O rosa choque da Substância quando passa o mouse */
+    opacity: 1;
+    text-shadow: 0 0 10px #ff00ff; /* Efeito neon no brilho */
+}
+.nav-links a:hover::after{transform:scaleX(1);}
+.nav-cta{font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:12px 28px;border:1px solid var(--neon-pink);color:var(--neon-pink);text-decoration:none;transition:all .3s;position:relative;overflow:hidden;}
+.nav-cta::before{content:'';position:absolute;inset:0;background:var(--neon-pink);transform:translateX(-100%);transition:transform .3s ease;z-index:-1;}
+.nav-cta:hover{color:var(--dark);}
+.nav-cta:hover::before{transform:translateX(0);}
+
+/* ══════════════ HERO ══════════════ */
+.hero { min-height: 120vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 100px 64px; }.hero-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.hero-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; position: fixed; }#hero::after { content: ''; position: absolute; bottom: 0; right: 0; width: 150px; height: 100px; background: #000; z-index: 1; pointer-events: none; }
+#home::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 250px;
+    height: 150px;
+    /* Um degradê que vai do preto total no cantinho até o transparente */
+    background: radial-gradient(circle at bottom right, #000 20%, transparent 70%);
+    z-index: 9999;
+    pointer-events: none;
+}
+.hero-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; position: fixed; }#hero::after { content: ''; position: absolute; bottom: 0; right: 0; width: 150px; height: 100px; background: #000; z-index: 1; pointer-events: none; }
+.hero-content{position:relative;z-index:2;max-width:800px;}
+.hero-tag{display:inline-flex;align-items:center;gap:12px;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--neon-pink);margin-bottom:32px;opacity:0;animation:slideRight .8s .3s ease forwards;}
+.hero-tag span{display:inline-block;width:40px;height:1px;background:var(--neon-pink);box-shadow:var(--glow-pink);}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,12vw,160px);line-height:.9;margin-bottom:8px;opacity:0;animation:slideUp 1s .5s ease forwards;}
+.hero-title .line1{display:block;color:var(--white);}
+.hero-title .line2{display:block;background:linear-gradient(135deg,var(--neon-pink),var(--neon-violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 30px rgba(255,45,155,.5));}
+.hero-title .line3{display:block;color:var(--white);-webkit-text-stroke:1px rgba(255,255,255,.3);-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:15px;line-height:1.9;color:var(--muted);max-width:480px;margin:32px 0 52px;opacity:0;animation:slideUp 1s .7s ease forwards;}
+.hero-actions{display:flex;gap:24px;align-items:center;opacity:0;animation:slideUp 1s .9s ease forwards;}
+.btn-neon{padding:16px 44px;background:transparent;border:1px solid var(--neon-pink);color:var(--neon-pink);font-size:11px;letter-spacing:4px;text-transform:uppercase;text-decoration:none;transition:all .4s;position:relative;overflow:hidden;font-family:'Space Grotesk',sans-serif;}
+.btn-neon::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--neon-pink),var(--neon-violet));opacity:0;transition:opacity .4s;}
+.btn-neon:hover{color:var(--dark);box-shadow:var(--glow-pink);}
+.btn-neon:hover::before{opacity:1;}
+.btn-neon span{position:relative;z-index:1;}
+.btn-ghost-neon{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:12px;transition:color .3s;}
+.btn-ghost-neon:hover{color:var(--neon-violet);}
+.btn-ghost-neon::after{content:'→';font-size:18px;transition:transform .3s;}
+.btn-ghost-neon:hover::after{transform:translateX(6px);}
+
+.hero-right{position:absolute;right:64px;top:50%;transform:translateY(-50%);opacity:0;animation:fadeIn 1.5s 1s ease forwards;}
+.hero-stats-vert{display:flex;flex-direction:column;gap:0;border-left:1px solid rgba(255,45,155,.2);}
+.hstat{padding:28px 0 28px 32px;border-bottom:1px solid rgba(255,45,155,.1);}
+.hstat:last-child{border-bottom:none;}
+.hstat-num{font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;background:linear-gradient(135deg,var(--neon-pink),var(--neon-violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hstat-lbl{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+
+.hero-scroll-hint{position:absolute;bottom:40px;left:64px;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:14px;opacity:0;animation:fadeIn 1s 1.5s ease forwards;}
+.scroll-dot{width:6px;height:6px;border-radius:50%;background:var(--neon-pink);box-shadow:var(--glow-pink);animation:blink 1.5s ease infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ══════════════ MARQUEE ══════════════ */
+.marquee-wrap{background:var(--dark2);border-top:1px solid rgba(255,45,155,.15);border-bottom:1px solid rgba(255,45,155,.15);padding:20px 0;overflow:hidden;}
+.marquee-inner{display:flex;width:max-content;animation:mar 18s linear infinite;}
+.marquee-inner:hover{animation-play-state:paused;}
+.mar-item{display:flex;align-items:center;gap:32px;padding:0 32px;font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.mar-icon{color:var(--neon-pink);font-size:14px;}
+
+/* ══════════════ SECTION SHARED ══════════════ */
+.s-label{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--neon-pink);margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.s-label::before{content:'';display:block;width:30px;height:1px;background:var(--neon-pink);box-shadow:var(--glow-pink);}
+.s-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,7vw,90px);line-height:.95;color:var(--white);}
+.s-title em{font-family:'Italiana',serif;font-style:italic;background:linear-gradient(135deg,var(--neon-pink),var(--neon-violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+/* ══════════════ TRATAMENTOS ══════════════ */
+.trat-section{padding:140px 64px;background:var(--dark);position:relative;}
+.trat-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--neon-violet),transparent);}
+.trat-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:80px;}
+.trat-header-right{font-size:13px;color:var(--muted);max-width:360px;line-height:1.8;text-align:right;}
+
+.trat-grid {
+    display: grid !important;
+    /* Isso cria 3 colunas que se ajustam sozinhas */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+    
+    /* AQUI ELES DESGRUDAM: 50px de espaço vertical e 30px horizontal */
+    gap: 50px 30px !important; 
+    
+    padding: 40px 0 !important;
+    width: 100% !important;
+    max-width: 1250px !important; /* Mantém os cards centralizados e chiques */
+    margin: 0 auto !important;
+}.trat-card{background:var(--dark2);padding:0;overflow:hidden;position:relative;group;cursor:pointer;}
+.trat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,45,155,.06),rgba(160,32,255,.06));opacity:0;transition:opacity .5s;}
+.trat-card:hover::before{opacity:1;}
+.trat-card-inner{padding:48px 40px;}
+.trat-card-num{font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(255,45,155,.06);line-height:1;margin-bottom:16px;transition:color .4s;}
+.trat-card:hover .trat-card-num{color:rgba(255,45,155,.18);}
+.trat-card-icon{font-size:32px;margin-bottom:20px;}
+.trat-card-name{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;color:var(--white);margin-bottom:12px;transition:color .3s;}
+.trat-card:hover .trat-card-name{color:var(--neon-pink);}
+.trat-card-desc{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:28px;}
+.trat-card-tag{display:inline-block;font-size:9px;letter-spacing:3px;text-transform:uppercase;border:1px solid rgba(255,45,155,.3);color:var(--neon-pink);padding:5px 12px;transition:all .3s;}
+.trat-card:hover .trat-card-tag{background:var(--neon-pink);color:var(--dark);}
+.trat-card-bar{height:2px;background:linear-gradient(to right,var(--neon-pink),var(--neon-violet));transform:scaleX(0);transform-origin:left;transition:transform .5s ease;}
+.trat-card:hover .trat-card-bar{transform:scaleX(1);}
+
+/* ══════════════ FULLSCREEN REVEAL ══════════════ */
+.fs-reveal{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:80px 64px;}
+.fs-reveal-bg{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(160,32,255,.15) 0%,var(--dark3) 60%);}
+.fs-reveal-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(160,32,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(160,32,255,.04) 1px,transparent 1px);background-size:60px 60px;}
+.fs-quote{font-family:'Italiana',serif;font-size:clamp(32px,5vw,72px);line-height:1.2;color:var(--white);position:relative;z-index:1;max-width:900px;}
+.fs-quote em{font-style:italic;background:linear-gradient(135deg,var(--neon-pink),var(--neon-violet),var(--neon-blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 40px rgba(255,45,155,.4));}
+.fs-author{margin-top:40px;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);position:relative;z-index:1;}
+.fs-author::before{content:'— ';}
+.fs-particles{position:absolute;inset:0;pointer-events:none;}
+
+/* ══════════════ PROCESSO ══════════════ */
+.processo {
+    padding: 80px 64px;
+    background: var(--dark);
+    position: relative;
+    clear: both; /* Impede que o carrossel de cima invada aqui */
+}
+
+.proc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr; /* Alinha os cards na esquerda e o quadro na direita */
+    gap: 60px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.proc-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+.proc-step {
+    padding: 30px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    border-left: 2px solid rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.proc-step:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 2px solid rgba(255, 45, 155, 0.3);
+    transform: translateX(6px);
+}
+
+.proc-step.active {
+    background: rgba(255, 45, 155, 0.07);
+    border-left: 2px solid var(--neon-pink);
+    box-shadow: 0 8px 32px 0 rgba(255, 45, 155, 0.12);
+}
+.proc-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    line-height: 1;
+    color: rgba(255, 45, 155, .1);
+    flex-shrink: 0;
+}
+
+.proc-content {
+    padding-top: 6px;
+}
+
+.proc-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 8px;
+}
+
+.proc-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+/* LADO DIREITO (TELA DO CARROSSEL) */
+.proc-visual {
+    position: relative;
+}
+
+.proc-screen {
+    background: var(--dark3);
+    border: 1px solid rgba(255, 45, 155, .2);
+    padding: 60px 40px;
+    text-align: center;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.proc-big-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 160px;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--white), rgba(255,45,155,0.2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.proc-screen-title {
+    font-family: 'Italiana', serif;
+    font-size: 36px;
+    color: var(--neon-pink);
+    text-shadow: var(--glow-pink);
+    margin-top: -20px;
+    margin-bottom: 15px;
+}
+
+.proc-screen-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.9;
+}
+
+.proc-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 40px;
+}
+
+.pdot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 45, 155, .4);
+    cursor: pointer;
+}
+
+.pdot.active {
+    background: var(--neon-pink);
+    box-shadow: var(--glow-pink);
+}
+}
+
+.proc-item.active {
+    background: rgba(255, 45, 155, 0.1);
+    border-left: 2px solid var(--neon-pink);
+}
+
+.proc-item span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: var(--neon-pink);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.proc-item h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    color: var(--white);
+}
+
+.proc-display {
+    position: sticky;
+    top: 50px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.proc-display img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    object-position: top;
+}
+
+.proc-info {
+    padding: 40px;
+}
+
+.proc-info h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    color: var(--white);
+}
+
+.proc-info p {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.6;
+}
+/* ══════════════ EQUIPE ══════════════ */
+.equipe{padding:140px 64px;background:var(--dark2);}
+.eq-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:1300px;}
+.eq-card{position:relative;overflow:hidden;cursor:pointer;}
+.eq-photo{aspect-ratio:2/3;background:var(--dark3);border:1px solid rgba(160,32,255,.15);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.eq-photo-icon{font-size:72px;opacity:.15;transition:transform .6s,opacity .4s;}
+.eq-card:hover .eq-photo-icon{transform:scale(1.1);opacity:.22;}
+.eq-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(5,5,8,.95) 0%,rgba(5,5,8,.4) 40%,transparent 70%);z-index:1;}
+.eq-photo-glow{position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to top,rgba(255,45,155,.08),transparent);z-index:2;opacity:0;transition:opacity .5s;}
+.eq-card:hover .eq-photo-glow{opacity:1;}
+.eq-photo-border{position:absolute;inset:0;border:1px solid transparent;transition:border-color .4s;z-index:3;}
+.eq-card:hover .eq-photo-border{border-color:rgba(255,45,155,.4);box-shadow:inset 0 0 30px rgba(255,45,155,.05);}
+.eq-info{padding:20px 4px 0;}
+.eq-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--white);transition:color .3s;}
+.eq-card:hover .eq-name{color:var(--neon-pink);}
+.eq-role{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+.eq-neon-line{height:1px;background:linear-gradient(to right,var(--neon-pink),var(--neon-violet));margin-top:14px;transform:scaleX(0);transform-origin:left;transition:transform .5s ease;}
+.eq-card:hover .eq-neon-line{transform:scaleX(1);}
+
+/* ══════════════ DEPOIMENTOS ══════════════ */
+.dep-section{padding:140px 64px;background:var(--dark);overflow:hidden;}
+.dep-track-wrap{overflow:hidden;margin:0 -64px;}
+.dep-track{display:flex;gap:24px;animation:depscroll 28s linear infinite;width:max-content;}
+.dep-track:hover{animation-play-state:paused;}
+.dep-card{width:420px;flex-shrink:0;background:var(--dark3);border:1px solid rgba(160,32,255,.15);padding:48px 40px;transition:border-color .4s,box-shadow .4s;}
+.dep-card:hover{border-color:rgba(255,45,155,.4);box-shadow:0 0 40px rgba(255,45,155,.06);}
+.dep-stars{color:var(--neon-pink);font-size:14px;letter-spacing:4px;margin-bottom:20px;text-shadow:var(--glow-pink);}
+.dep-text{font-family:'Italiana',serif;font-size:19px;font-style:italic;color:var(--white);line-height:1.7;margin-bottom:32px;}
+.dep-line{width:40px;height:1px;background:linear-gradient(to right,var(--neon-pink),transparent);margin-bottom:24px;}
+.dep-author{display:flex;align-items:center;gap:16px;}
+.dep-av{width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,45,155,.4);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--neon-pink);}
+.dep-name{font-size:14px;font-weight:500;}
+.dep-proc{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--neon-violet);margin-top:3px;}
+@keyframes depscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ══════════════ PREÇOS ══════════════ */
+.precos-section{padding:140px 64px;background:var(--dark3);position:relative;overflow:hidden;}
+.precos-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--neon-pink),var(--neon-violet),transparent);}
+.preco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1100px;margin-top:80px;}
+.preco-card{background:var(--dark2);border:1px solid rgba(255,45,155,.1);padding:56px 44px;position:relative;transition:border-color .4s,transform .4s,box-shadow .4s;}
+.preco-card:hover{transform:translateY(-8px);border-color:rgba(255,45,155,.4);box-shadow:0 40px 80px rgba(255,45,155,.08),0 0 40px rgba(255,45,155,.06);}
+.preco-card.featured{border-color:var(--neon-pink);box-shadow:0 0 60px rgba(255,45,155,.15),inset 0 0 60px rgba(255,45,155,.03);}
+.preco-card.featured::before{content:'';position:absolute;top:-1px;left:0;right:0;height:2px;background:linear-gradient(to right,var(--neon-pink),var(--neon-violet));}
+.preco-badge{font-size:9px;letter-spacing:3px;text-transform:uppercase;background:linear-gradient(135deg,var(--neon-pink),var(--neon-violet));color:var(--dark);padding:6px 16px;display:inline-block;margin-bottom:28px;font-weight:500;}
+.preco-name{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--muted);margin-bottom:24px;}
+.preco-price{font-family:'Bebas Neue',sans-serif;font-size:60px;line-height:1;color:var(--white);}
+.preco-card.featured .preco-price{background:linear-gradient(135deg,var(--neon-pink),var(--neon-violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 20px rgba(255,45,155,.4));}
+.preco-period{font-size:12px;color:var(--muted);margin-top:6px;margin-bottom:32px;}
+.preco-div{height:1px;background:rgba(255,45,155,.1);margin-bottom:32px;}
+.preco-items{list-style:none;display:flex;flex-direction:column;gap:14px;margin-bottom:40px;}
+.preco-item{font-size:13px;color:rgba(240,238,248,.6);display:flex;align-items:center;gap:10px;}
+.preco-item::before{content:'◆';color:var(--neon-pink);font-size:8px;flex-shrink:0;}
+.btn-preco{display:block;text-align:center;padding:15px;border:1px solid rgba(255,45,155,.3);color:var(--muted);font-size:10px;letter-spacing:4px;text-transform:uppercase;text-decoration:none;transition:all .3s;font-family:'Space Grotesk',sans-serif;}
+.btn-preco:hover,.preco-card.featured .btn-preco{background:var(--neon-pink);border-color:var(--neon-pink);color:var(--dark);box-shadow:var(--glow-pink);}
+
+/* ══════════════ CONTATO ══════════════ */
+.contato{padding:140px 64px;background:var(--dark);position:relative;overflow:hidden;}
+.contato::before{content:'';position:absolute;bottom:-300px;right:-300px;width:700px;height:700px;background:radial-gradient(circle,rgba(160,32,255,.08) 0%,transparent 70%);}
+.contato-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:100px;max-width:1300px;position:relative;z-index:1;}
+.contato-info-items{display:flex;flex-direction:column;gap:24px;margin-top:40px;}
+.ci-item{display:flex;gap:20px;align-items:flex-start;}
+.ci-icon{width:44px;height:44px;border:1px solid rgba(255,45,155,.3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:all .3s;}
+.ci-item:hover .ci-icon{border-color:var(--neon-pink);box-shadow:var(--glow-pink);}
+.ci-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--neon-pink);margin-bottom:4px;}
+.ci-value{font-size:14px;color:var(--white);}
+
+.c-form{display:flex;flex-direction:column;gap:20px;}
+.c-form-title{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:3px;color:var(--white);margin-bottom:8px;}
+.c-form-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7;}
+.fg{display:flex;flex-direction:column;gap:8px;}
+.fg label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--neon-pink);}
+.fg input,.fg select,.fg textarea{background:var(--dark3);border:1px solid rgba(255,45,155,.15);color:var(--white);padding:14px 18px;font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .3s,box-shadow .3s;-webkit-appearance:none;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--neon-pink);box-shadow:0 0 20px rgba(255,45,155,.1);}
+.fg select option{background:var(--dark3);}
+.fg textarea{min-height:110px;resize:vertical;}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.btn-submit-neon{background:linear-gradient(135deg,var(--neon-pink),var(--neon-violet));color:var(--dark);border:none;padding:18px 44px;font-size:11px;letter-spacing:4px;text-transform:uppercase;font-weight:500;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .4s;align-self:flex-start;position:relative;overflow:hidden;}
+.btn-submit-neon::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--neon-violet),var(--neon-blue));opacity:0;transition:opacity .4s;}
+.btn-submit-neon:hover::before{opacity:1;}
+.btn-submit-neon:hover{box-shadow:var(--glow-pink);transform:translateY(-2px);}
+.btn-submit-neon span{position:relative;z-index:1;}
+
+/* ══════════════ FOOTER ══════════════ */
+footer{background:var(--dark2);border-top:1px solid rgba(255,45,155,.1);}
+.footer-main{padding:80px 64px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;max-width:1400px;margin:0 auto;}
+.f-logo{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:6px;background:linear-gradient(135deg,var(--neon-pink),var(--neon-violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px;}
+.f-desc{font-size:13px;color:var(--muted);line-height:1.8;max-width:260px;}
+.f-socials{display:flex;gap:10px;margin-top:28px;}
+.fsoc{width:40px;height:40px;border:1px solid rgba(255,45,155,.2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-decoration:none;transition:all .3s;}
+.fsoc:hover{border-color:var(--neon-pink);color:var(--neon-pink);box-shadow:var(--glow-pink);}
+.f-col h4{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--neon-pink);margin-bottom:24px;}
+.f-col ul{list-style:none;display:flex;flex-direction:column;gap:12px;}
+.f-col ul a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .3s;}
+.f-col ul a:hover{color:var(--neon-pink);}
+.footer-bottom{border-top:1px solid rgba(255,45,155,.08);padding:24px 64px;display:flex;justify-content:space-between;align-items:center;}
+.f-copy{font-size:11px;color:rgba(107,104,128,.6);}
+.f-copy a{color:var(--neon-pink);text-decoration:none;}
+
+/* ══════════════ TRANSITIONS ══════════════ */
+.page-transition{position:fixed;inset:0;z-index:8999;pointer-events:none;}
+.pt-panel{position:absolute;left:0;right:0;height:25%;background:var(--dark2);}
+.pt-panel:nth-child(1){top:0;transform:scaleY(0);transform-origin:top;}
+.pt-panel:nth-child(2){top:25%;transform:scaleY(0);transform-origin:top;}
+.pt-panel:nth-child(3){top:50%;transform:scaleY(0);transform-origin:top;}
+.pt-panel:nth-child(4){top:75%;transform:scaleY(0);transform-origin:top;}
+
+/* ══════════════ REVEAL ANIMS ══════════════ */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .9s ease,transform .9s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .9s ease,transform .9s ease;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+
+/* ══════════════ ANIMATIONS ══════════════ */
+@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideRight{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes mar{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes scanline{0%{top:-5%}100%{top:105%}}
+
+/* ══════════════ RESPONSIVE ══════════════ */
+@media(max-width:1024px){
+  nav,nav.scrolled{padding:20px 32px;}
+  .hero,.trat-section,.processo,.equipe,.dep-section,.precos-section,.contato{padding:80px 32px;}
+  .hero-right{display:none;}
+  .trat-grid{grid-template-columns:1fr 1fr;}
+  .proc-grid{grid-template-columns:1fr;gap:60px;}
+  .eq-grid{grid-template-columns:1fr 1fr;}
+  .preco-grid{grid-template-columns:1fr;}
+  .contato-grid{grid-template-columns:1fr;gap:60px;}
+  .footer-main{grid-template-columns:1fr 1fr;gap:40px;}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center;}
+}
+@media(max-width:640px){
+  .nav-links,.nav-cta{display:none;}
+  .trat-grid{grid-template-columns:1fr;}
+  .eq-grid{grid-template-columns:1fr 1fr;}
+  .fg-row{grid-template-columns:1fr;}
+  .footer-main{grid-template-columns:1fr;}
+  .hero-title{font-size:72px;}
+}
+/* --- ESTILO FINAL: FOTOS GIGANTES + EFEITO VIDRO --- */
+
+/* 1. O Card: Vidro (Glassmorphism) + Hover que Cresce */
+.trat-card {
+    background: rgba(255, 255, 255, 0.03) !important; 
+    backdrop-filter: blur(20px) !important; 
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+    padding: 0 !important; 
+    overflow: hidden !important;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Faz o card subir e crescer quando passa o mouse */
+.trat-card:hover {
+    transform: translateY(-15px) scale(1.04) !important; 
+    background: rgba(255, 255, 255, 0.08) !important; 
+    border-color: #ff00ff !important; /* Brilho Rosa Neon */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 2. As FOTOS DOMINANTES (Aumentei para ficarem impactantes) */
+.trat-img-wrap {
+    position: relative !important;
+    width: 100% !important;
+    height: 320px !important; /* Altura de impacto para as fotos */
+    overflow: hidden !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.trat-img-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+   /* Linha 373: Mude para 0.4s */
+transition: transform 0.5s ease !important;
+}
+
+/* Zoom elegante na foto ao passar o mouse */
+.trat-card:hover .trat-img-wrap img {
+    transform: scale(1.15) !important;
+}
+
+/* A SOMBRA QUE MATA O SÍMBOLO GEMINI */
+.trat-img-wrap::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    width: 120px !important; 
+    height: 80px !important;
+    /* Degradê preto denso no canto para sumir com o ícone de vez */
+    background: radial-gradient(circle at bottom right, #000 50%, transparent 95%) !important;
+    z-index: 10 !important;
+    pointer-events: none !important;
+}
+
+/* 3. Ajuste dos Textos (Para ficarem legíveis e bonitos) */
+.trat-info-inner {
+    padding: 30px !important; 
+}
+
+.trat-card h3 {
+    font-size: 1.4rem !important;
+    color: #fff !important;
+    font-family: 'Bebas Neue', sans-serif !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 12px !important;
+    text-transform: uppercase !important;
+}
+
+.trat-card:hover h3 {
+    color: #ff00ff !important; /* Nome brilha no hover */
+}
+
+.trat-card p {
+    font-size: 0.95rem !important;
+    color: rgba(255, 255, 255, 0.65) !important;
+    line-height: 1.6 !important;
+    margin-bottom: 25px !important;
+}
+
+/* Tags: Assinatura, Premium, High Tech */
+.trat-card-tag {
+    display: inline-block !important;
+    padding: 6px 14px !important;
+    font-size: 10px !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 4px !important;
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Cor especial para as tags no hover */
+.trat-card:hover .trat-card-tag {
+    border-color: #ff00ff !important;
+    color: #ff00ff !important;
+}
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 40px;
+    right: 40px;
+    background-color: #25d366;
+    color: #FFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+    transition: transform 0.3s ease;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    color: #FFF;
+}
+
+/* Garante a separação elegante dos cards da esquerda */
+.proc-steps {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important; /* Cria o espaço exato entre eles */
+}
+
+/* Devolve o efeito premium de vidro fosco para cada card */
+.proc-step {
+    background: rgba(255, 255, 255, 0.02) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 12px !important;
+    padding: 24px !important;
+    transition: all 0.3s ease !important; /* Deixa o efeito suave */
+}
+
+/* Faz o card acender o vidro lindamente ao passar o mouse */
+.proc-step:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    transform: translateX(6px) !important; /* Dá o empurrãozinho de sofisticação para a direita */
+    cursor: pointer !important;
+}
+/* Responsividade para garantir o layout no celular */
+@media (max-width: 992px) {
+    .proc-grid {
+        display: flex !important;
+        flex-direction: column-reverse !important;
+        gap: 30px !important;
+        padding: 20px !important;
+    }
+
+    .proc-visual {
+        width: 100% !important;
+        height: 300px !important;
+    }
+
+    .proc-steps {
+        width: 100% !important;
+        gap: 15px !important;
+    }
+
+    .proc-step {
+        padding: 15px !important;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pre-logo">NOIR</div>
+  <div class="pre-bar-wrap"><div class="pre-bar"></div></div>
+  <div class="pre-txt">Carregando experiência</div>
+</div>
+
+<!-- PAGE TRANSITION -->
+<div class="page-transition" id="pt">
+  <div class="pt-panel"></div>
+  <div class="pt-panel"></div>
+  <div class="pt-panel"></div>
+  <div class="pt-panel"></div>
+</div>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- CANVAS BG -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">NOIR CLINIC</div>
+  <ul class="nav-links">
+    <li><a href="#tratamentos">Tratamentos</a></li>
+    <li><a href="#PROCESSO">PROCESSO</a></li>
+    <li><a href="#equipe">Equipe</a></li>
+    <li><a href="#precos">Planos</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <a href="#contato" class="nav-cta">Agendar</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+    <img src="loira4.jpg" class="hero-bg-img" alt="Modelo Noir Clinic">
+  <div class="hero-bg-gradient"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-tag"><span></span>Clínica de Estética Premium</div>
+    <h1 class="hero-title">
+      <span class="line1">ESTÉTICA</span>
+      <span class="line2">AVANÇADA</span>
+      <span class="line3">ABSOLUTA</span>
+    </h1>
+    <p class="hero-sub">Protocolos de outro nível para quem não aceita o comum. Tecnologia cinematográfica. Resultados que falam por si.</p>
+    <div class="hero-actions">
+      <a href="#contato" class="btn-neon"><span>Agendar Avaliação</span></a>
+      <a href="#tratamentos" class="btn-ghost-neon">Explorar</a>
+    </div>
+    
+  </div>
+  
+  <div class="hero-scroll-hint"><div class="scroll-dot"></div>Role para descobrir</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" style="margin-top: 100px; position: relative; z-index: 10; background: #000;">  <div class="marquee-inner">
+    <div class="mar-item"><span class="mar-icon">◆</span>Harmonização Facial<span class="mar-icon">◆</span>Botox Premium<span class="mar-icon">◆</span>Laser CO₂<span class="mar-icon">◆</span>Sculptra<span class="mar-icon">◆</span>Criolipólise<span class="mar-icon">◆</span>Bioestimulador<span class="mar-icon">◆</span>Microagulhamento<span class="mar-icon">◆</span>Peeling Químico<span class="mar-icon">◆</span>Fio de PDO<span class="mar-icon">◆</span>HIFU<span class="mar-icon">◆</span>Preenchimento Labial</div>
+    <div class="mar-item"><span class="mar-icon">◆</span>Harmonização Facial<span class="mar-icon">◆</span>Botox Premium<span class="mar-icon">◆</span>Laser CO₂<span class="mar-icon">◆</span>Sculptra<span class="mar-icon">◆</span>Criolipólise<span class="mar-icon">◆</span>Bioestimulador<span class="mar-icon">◆</span>Microagulhamento<span class="mar-icon">◆</span>Peeling Químico<span class="mar-icon">◆</span>Fio de PDO<span class="mar-icon">◆</span>HIFU<span class="mar-icon">◆</span>Preenchimento Labial</div>
+  </div>
+</div>
+
+<section class="trat-section" id="tratamentos">
+  <div class="trat-header reveal">
+    <div>
+      <div class="s-label">Tratamentos</div>
+      <h2 class="s-title">O QUE<br><em>fazemos</em></h2>
+    </div>
+    <div class="trat-header-right">Cada protocolo é uma obra de arte. Desenvolvidos por especialistas internacionais com a mais alta tecnologia disponível no Brasil.</div>
+  </div>
+
+  <div class="trat-grid reveal">
+    <div class="trat-card">
+      <div class="trat-card-inner">
+        <div class="trat-img-wrap">
+          <img src="harmonização.jpg" alt="Harmonização">
+        </div>
+        <div class="trat-card-num">01</div>
+        <div class="trat-info-inner">
+          <h3>HARMONIZAÇÃO FACIAL</h3>
+          <p>Protocolo completo com Botox, preenchimento e bioestimuladores. Resultado natural e absurdamente sofisticado.</p>
+          <div class="trat-card-tag tag-assinatura">Assinatura</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trat-card">
+      <div class="trat-card-inner">
+        <div class="trat-img-wrap">
+          <img src="laser.jpg" alt="Laser">
+        </div>
+        <div class="trat-card-num">02</div>
+        <div class="trat-info-inner">
+          <h3>LASER CO₂ FRACIONADO</h3>
+          <p>Tecnologia de ponta para rejuvenescimento profundo. Pele renovada com precisão cirúrgica.</p>
+          <div class="trat-card-tag tag-hightech">High Tech</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trat-card">
+      <div class="trat-card-inner">
+        <div class="trat-img-wrap">
+          <img src="Sculptra.jpg" alt="Sculptra">
+        </div>
+        <div class="trat-card-num">03</div>
+        <div class="trat-info-inner">
+          <h3>SCULPTRA & BIOESTIMULADOR</h3>
+          <p>Colágeno estimulado de dentro para fora. Resultados que duram anos, não meses.</p>
+          <div class="trat-card-tag tag-premium">Premium</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trat-card">
+      <div class="trat-card-inner">
+        <div class="trat-img-wrap">
+          <img src="Criolipólise.jpg" alt="Criolipólise">
+        </div>
+        <div class="trat-card-num">04</div>
+        <div class="trat-info-inner">
+          <h3>CRIOLIPÓLISE ELITE</h3>
+          <p>Eliminação de gordura localizada sem corte, sem downtime. Resultados visíveis em 30 dias.</p>
+          <div class="trat-card-tag tag-assinatura">Assinatura</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trat-card">
+      <div class="trat-card-inner">
+        <div class="trat-img-wrap">
+          <img src="Microagulhamento.jpg" alt="Microagulhamento">
+        </div>
+        <div class="trat-card-num">05</div>
+        <div class="trat-info-inner">
+          <h3>MICROAGULHAMENTO GOLD</h3>
+          <p>Indução de colágeno com agulhas de ouro e ácido hialurônico. Pele luminosa e renovada.</p>
+          <div class="trat-card-tag tag-premium">Premium</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trat-card">
+      <div class="trat-card-inner">
+        <div class="trat-img-wrap">
+          <img src="HIFU.jpg" alt="HIFU">
+        </div>
+        <div class="trat-card-num">06</div>
+        <div class="trat-info-inner">
+          <h3>HIFU ULTRASSOM FOCADO</h3>
+          <p>Lifting sem cirurgia. Contração de SMAS profundo para um efeito lifting definitivo e natural.</p>
+          <div class="trat-card-tag tag-hightech">High Tech</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FULLSCREEN REVEAL -->
+<div class="fs-reveal">
+  <div class="fs-reveal-bg"></div>
+  <div class="fs-reveal-grid"></div>
+  <div class="fs-particles" id="particles"></div>
+  <div>
+    <div class="fs-quote reveal">
+      "Beleza não é o que você vê.<br>É o que você <em>irradia</em><br>quando entra em um ambiente."
+    </div>
+    <div class="fs-author reveal">Dra. Isabella Noir — Fundadora</div>
+  </div>
+</div>
+
+<!-- PROCESSO -->
+
+ 
+ <section class="PROCESSO" id="PROCESSO">
+        <div class="proc-grid">
+            
+            <div class="proc-steps">
+                <div class="proc-step reveal" onclick="changeStep(1)">
+                    <div class="proc-num">01</div>
+                    <div class="proc-content">
+                        <div class="proc-name">DIAGNÓSTICO 3D</div>
+                        <div class="proc-desc">Análise facial profunda via IA para identificar as necessidades reais da sua pele.</div>
+                    </div>
+                </div>
+
+                <div class="proc-step reveal" onclick="changeStep(2)">
+                    <div class="proc-num">02</div>
+                    <div class="proc-content">
+                        <div class="proc-name">PROTOCOLOS PERSONALIZADOS</div>
+                        <div class="proc-desc">Fórmulas exclusivas manipuladas em tempo real para o seu DNA.</div>
+                    </div>
+                </div>
+
+                <div class="proc-step reveal" onclick="changeStep(3)">
+                    <div class="proc-num">03</div>
+                    <div class="proc-content">
+                        <div class="proc-name">APLICAÇÃO PRECISA</div>
+                        <div class="proc-desc">Tecnologia microfluídica para entrega de ativos nas camadas profundas.</div>
+                    </div>
+                </div>
+
+                <div class="proc-step reveal" onclick="changeStep(4)">
+                    <div class="proc-num">04</div>
+                    <div class="proc-content">
+                        <div class="proc-name">ACOMPANHAMENTO VITALÍCIO</div>
+                        <div class="proc-desc">Monitoramento contínuo para garantir que sua pele permaneça radiante.</div>
+                    </div>
+                </div>
+            </div> <div class="proc-visual reveal-right">
+                <div class="proc-screen" style="position: relative; overflow: hidden; border-radius: 16px;">
+                    <img src="CLINICA01.jpg" id="img-processo" alt="Background" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+                    
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0.2) 100%); z-index: 1;"></div>
+                    
+                    <div class="proc-big-num" id="num-processo" style="position: relative; z-index: 2;">1</div>
+                    <div class="proc-screen-title" id="titulo-processo" style="position: relative; z-index: 2;">01 // DIAGNÓSTICO 3D</div>
+                    <div class="proc-screen-text" id="desc-processo" style="position: relative; z-index: 2;">Análise facial profunda via IA para identificar as necessidades reais da sua pele.</div>
+                    
+                    <div class="proc-dots" style="position: relative; z-index: 2;">
+                        <div class="pdot active" id="dot1"></div>
+                        <div class="pdot" id="dot2"></div>
+                        <div class="pdot" id="dot3"></div>
+                        <div class="pdot" id="dot4"></div>
+                    </div>
+                </div>
+            </div> </div> </section>
+
+<!-- EQUIPE -->
+<section class="equipe" id="equipe">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:70px;">
+    <div class="reveal-left">
+      <div class="s-label">Especialistas</div>
+      <h2 class="s-title">A ARTE<br><em>delas</em></h2>
+    </div>
+    <a href="#contato" style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:10px;transition:color .3s;" onmouseover="this.style.color='#FF2D9B'" onmouseout="this.style.color='var(--muted)'">Ver todas →</a>
+  </div>
+  <div class="eq-grid reveal">
+    <div class="eq-card">
+   <div class="eq-photo">
+                <img src="doutora1.jfif" alt="Dra. Isabella Noir" class="team-photo">
+                <div class="eq-photo-glow"></div>
+                <div class="eq-photo-border"></div>
+            </div>
+      <div class="eq-info">
+        <div class="eq-name">DRA. ISABELLA NOIR</div>
+        <div class="eq-role">Fundadora & Diretora Clínica</div>
+        <div class="eq-neon-line"></div>
+      </div>
+    </div>
+    <div class="eq-card">
+   <div class="eq-photo">
+                <img src="doutora3.jfif" alt="Dra. Fernanda Lace" class="team-photo">
+                <div class="eq-photo-glow"></div>
+                <div class="eq-photo-border"></div>
+            </div>
+      <div class="eq-info">
+        <div class="eq-name">DRA. CAMILA VOSS</div>
+        <div class="eq-role">Dermatologista Sênior</div>
+        <div class="eq-neon-line"></div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-photo">
+       <div class="eq-photo">
+                <img src="doutora2.jfif" alt="Dra. Camila Voss" class="team-photo">
+                <div class="eq-photo-glow"></div>
+                <div class="eq-photo-border"></div>
+            </div>
+        <div class="eq-photo-glow"></div>
+        <div class="eq-photo-border"></div>
+      </div>
+      <div class="eq-info">
+        <div class="eq-name">DRA. FERNANDA LACE</div>
+        <div class="eq-role">Especialista Corporal</div>
+        <div class="eq-neon-line"></div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-photo">
+        <div class="eq-photo">
+                <img src="doutora4.jfif" alt="Dra. Raquel Stone" class="team-photo">
+                <div class="eq-photo-glow"></div>
+                <div class="eq-photo-border"></div>
+            </div>
+        <div class="eq-photo-glow"></div>
+        <div class="eq-photo-border"></div>
+      </div>
+      <div class="eq-info">
+        <div class="eq-name">DRA. RAQUEL STONE</div>
+        <div class="eq-role">Harmonização & Laser</div>
+        <div class="eq-neon-line"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="dep-section" id="depoimentos">
+  <div style="margin-bottom:70px;">
+    <div class="s-label reveal">Depoimentos</div>
+    <h2 class="s-title reveal">ELAS<br><em>falam</em></h2>
+  </div>
+  <div class="dep-track-wrap">
+    <div class="dep-track">
+      <div class="dep-card"><div class="dep-stars">★★★★★</div><div class="dep-text">"Entrei na Noir Clinic e saí outra pessoa. Não é exagero. É transformação de verdade."</div><div class="dep-line"></div><div class="dep-author"><div class="dep-av">A</div><div><div class="dep-name">Amanda C.</div><div class="dep-proc">Harmonização Facial</div></div></div></div>
+      <div class="dep-card"><div class="dep-stars">★★★★★</div><div class="dep-text">"Já fui em clínicas em Miami e Paris. A Noir está no mesmo patamar — ou acima."</div><div class="dep-line"></div><div class="dep-author"><div class="dep-av">R</div><div><div class="dep-name">Renata F.</div><div class="dep-proc">Laser CO₂ + Sculptra</div></div></div></div>
+      <div class="dep-card"><div class="dep-stars">★★★★★</div><div class="dep-text">"O resultado do botox foi tão natural que meu marido levou 2 semanas para perceber. Arrasou."</div><div class="dep-line"></div><div class="dep-author"><div class="dep-av">P</div><div><div class="dep-name">Patrícia M.</div><div class="dep-proc">Botox Premium</div></div></div></div>
+      <div class="dep-card"><div class="dep-stars">★★★★★</div><div class="dep-text">"Ambiente incrível, equipe impecável, resultado que vai além das expectativas. Voltarei sempre."</div><div class="dep-line"></div><div class="dep-author"><div class="dep-av">L</div><div><div class="dep-name">Larissa B.</div><div class="dep-proc">Protocolo Elite</div></div></div></div>
+      <div class="dep-card"><div class="dep-stars">★★★★★</div><div class="dep-text">"Perdi 6cm de gordura localizada sem cirurgia. Resultado em 30 dias, como prometido."</div><div class="dep-line"></div><div class="dep-author"><div class="dep-av">J</div><div><div class="dep-name">Juliana K.</div><div class="dep-proc">Criolipólise Elite</div></div></div></div>
+      <!-- clone -->
+      <div class="dep-card"><div class="dep-stars">★★★★★</div><div class="dep-text">"Entrei na Noir Clinic e saí outra pessoa. Não é exagero. É transformação de verdade."</div><div class="dep-line"></div><div class="dep-author"><div class="dep-av">A</div><div><div class="dep-name">Amanda C.</div><div class="dep-proc">Harmonização Facial</div></div></div></div>
+      <div class="dep-card"><div class="dep-stars">★★★★★</div><div class="dep-text">"Já fui em clínicas em Miami e Paris. A Noir está no mesmo patamar — ou acima."</div><div class="dep-line"></div><div class="dep-author"><div class="dep-av">R</div><div><div class="dep-name">Renata F.</div><div class="dep-proc">Laser CO₂ + Sculptra</div></div></div></div>
+      <div class="dep-card"><div class="dep-stars">★★★★★</div><div class="dep-text">"O resultado do botox foi tão natural que meu marido levou 2 semanas para perceber. Arrasou."</div><div class="dep-line"></div><div class="dep-author"><div class="dep-av">P</div><div><div class="dep-name">Patrícia M.</div><div class="dep-proc">Botox Premium</div></div></div></div>
+      <div class="dep-card"><div class="dep-stars">★★★★★</div><div class="dep-text">"Ambiente incrível, equipe impecável, resultado que vai além das expectativas. Voltarei sempre."</div><div class="dep-line"></div><div class="dep-author"><div class="dep-av">L</div><div><div class="dep-name">Larissa B.</div><div class="dep-proc">Protocolo Elite</div></div></div></div>
+      <div class="dep-card"><div class="dep-stars">★★★★★</div><div class="dep-text">"Perdi 6cm de gordura localizada sem cirurgia. Resultado em 30 dias, como prometido."</div><div class="dep-line"></div><div class="dep-author"><div class="dep-av">J</div><div><div class="dep-name">Juliana K.</div><div class="dep-proc">Criolipólise Elite</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PREÇOS -->
+<section class="precos-section" id="precos">
+  <div class="reveal">
+    <div class="s-label">Planos & Investimento</div>
+    <h2 class="s-title">ESCOLHA<br><em>seu nível</em></h2>
+  </div>
+  <div class="preco-grid reveal">
+    <div class="preco-card">
+      <div class="preco-name">Essencial</div>
+      <div class="preco-price">R$ 890</div>
+      <div class="preco-period">por sessão avulsa</div>
+      <div class="preco-div"></div>
+      <ul class="preco-items">
+        <li class="preco-item">Avaliação inicial gratuita</li>
+        <li class="preco-item">1 tratamento à escolha</li>
+        <li class="preco-item">Protocolo de home care</li>
+        <li class="preco-item">Retorno em 30 dias</li>
+      </ul>
+      <a href="#contato" class="btn-preco">Começar</a>
+    </div>
+    <div class="preco-card featured">
+      <div class="preco-badge">Mais Escolhido</div>
+      <div class="preco-name">Noir Signature</div>
+      <div class="preco-price">R$ 2.890</div>
+      <div class="preco-period">pacote mensal — 4 sessões</div>
+      <div class="preco-div"></div>
+      <ul class="preco-items">
+        <li class="preco-item">Diagnóstico 3D completo</li>
+        <li class="preco-item">4 tratamentos combinados</li>
+        <li class="preco-item">Kit home care exclusivo</li>
+        <li class="preco-item">Retornos ilimitados</li>
+        <li class="preco-item">Prioridade no agendamento</li>
+      </ul>
+      <a href="#contato" class="btn-preco">Assinar Agora</a>
+    </div>
+    <div class="preco-card">
+      <div class="preco-name">Black Elite</div>
+      <div class="preco-price">R$ 6.500</div>
+      <div class="preco-period">acesso trimestral total</div>
+      <div class="preco-div"></div>
+      <ul class="preco-items">
+        <li class="preco-item">Tratamentos ilimitados</li>
+        <li class="preco-item">Médica dedicada exclusiva</li>
+        <li class="preco-item">Dermocosméticos importados</li>
+        <li class="preco-item">Acesso VIP 24/7</li>
+        <li class="preco-item">Consulta nutricional</li>
+        <li class="preco-item">Transfer incluso (SP)</li>
+      </ul>
+      <a href="#contato" class="btn-preco">Entrar no Black</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="contato" id="contato">
+  <div class="contato-grid">
+    <div>
+      <div class="s-label reveal-left">Contato</div>
+      <h2 class="s-title reveal-left">VAMOS<br><em>falar?</em></h2>
+      <div class="contato-info-items reveal-left">
+        <div class="ci-item"><div class="ci-icon">📍</div><div><div class="ci-label">Endereço</div><div class="ci-value">R. Oscar Freire, 900 — Jardins<br>São Paulo, SP</div></div></div>
+        <div class="ci-item"><div class="ci-icon">📞</div><div><div class="ci-label">Telefone</div><div class="ci-value">(11) 3000-0000 / WhatsApp</div></div></div>
+        <div class="ci-item"><div class="ci-icon">✉</div><div><div class="ci-label">E-mail</div><div class="ci-value">contato@noirclinic.com.br</div></div></div>
+        <div class="ci-item"><div class="ci-icon">🕐</div><div><div class="ci-label">Horário</div><div class="ci-value">Seg–Sex: 9h–20h | Sáb: 9h–16h</div></div></div>
+      </div>
+    </div>
+    <div class="c-form reveal-right">
+      <div class="c-form-title">AGENDAR</div>
+      <div class="c-form-sub">Avaliação inicial gratuita e sem compromisso. Resposta em até 1 hora.</div>
+      <div class="fg-row">
+        <div class="fg"><label>Nome</label><input type="text" placeholder="Seu nome"></div>
+        <div class="fg"><label>WhatsApp</label><input type="tel" placeholder="(11) 99999-9999"></div>
+      </div>
+      <div class="fg"><label>E-mail</label><input type="email" placeholder="seu@email.com"></div>
+      <div class="fg"><label>Tratamento</label>
+        <select>
+          <option disabled selected>Selecione</option>
+          <option>Harmonização Facial</option>
+          <option>Botox Premium</option>
+          <option>Laser CO₂</option>
+          <option>Sculptra</option>
+          <option>Criolipólise Elite</option>
+          <option>Plano Noir Signature</option>
+          <option>Plano Black Elite</option>
+        </select>
+      </div>
+      <div class="fg"><label>Mensagem</label><textarea placeholder="Conte seu objetivo..."></textarea></div>
+<a href="https://wa.me/5511919785284?text=Ol%C3%A1%2C%20gostei%20do%20site%20Noir%20Clinic%20e%20quero%20um%20projeto%20exclusivo%20para%20o%20meu%20neg%C3%B3cio!" target="_blank" style="text-decoration: none;">
+    <button type="button" class="btn-submit-neon"><span>QUERO UM SITE DE ALTA PERFORMANCE</span></button>
+</a>    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div>
+      <div class="f-logo">NOIR CLINIC</div>
+      <div class="f-desc">Estética de alto nível para quem exige o extraordinário. Tecnologia, arte e ciência em cada procedimento.</div>
+      <div class="f-socials">
+        <a href="#" class="fsoc">ig</a>
+        <a href="#" class="fsoc">fb</a>
+        <a href="#" class="fsoc">yt</a>
+        <a href="#" class="fsoc">in</a>
+      </div>
+    </div>
+    <div class="f-col">
+      <h4>Tratamentos</h4>
+      <ul>
+        <li><a href="#">Harmonização</a></li>
+        <li><a href="#">Botox Premium</a></li>
+        <li><a href="#">Laser CO₂</a></li>
+        <li><a href="#">Sculptra</a></li>
+        <li><a href="#">Criolipólise</a></li>
+        <li><a href="#">HIFU</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h4>Clínica</h4>
+      <ul>
+        <li><a href="#">Sobre Nós</a></li>
+        <li><a href="#">Especialistas</a></li>
+        <li><a href="#">Tecnologia</a></li>
+        <li><a href="#">Planos</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h4>Contato</h4>
+      <ul>
+        <li><a href="#">(11) 3000-0000</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">contato@noir.com.br</a></li>
+        <li><a href="#">Jardins, São Paulo</a></li>
+        <li><a href="#">Seg–Sex 9h–20h</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="f-copy">© 2025 Noir Clinic. Todos os direitos reservados. Desenvolvido por <a href="#">Loren Solutions</a>.</div>
+    <div class="f-copy">CRM-SP 000.000 · Anvisa Reg. 00000</div>
+  </div>
+</footer>
+
+<script>
+// ══ PRELOADER ══
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('preloader').classList.add('out');
+    document.body.style.overflow='';
+  },2600);
+});
+document.body.style.overflow='hidden';
+
+// ══ CANVAS PARTICLES ══
+const canvas=document.getElementById('bg-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,pts=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();
+window.addEventListener('resize',resize);
+class Pt{
+  constructor(){this.reset();}
+  reset(){
+    this.x=Math.random()*W;
+    this.y=Math.random()*H;
+    this.r=Math.random()*1.5+.3;
+    this.vx=(Math.random()-.5)*.3;
+    this.vy=(Math.random()-.5)*.3;
+    this.a=Math.random();
+    this.c=Math.random()>.5?'255,45,155':'160,32,255';
+  }
+  update(){
+    this.x+=this.vx;this.y+=this.vy;
+    this.a+=.005;
+    if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();
+  }
+  draw(){
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${this.c},${.4+Math.sin(this.a)*.3})`;
+    ctx.fill();
+  }
+}
+for(let i=0;i<120;i++)pts.push(new Pt());
+// connections
+function drawConnections(){
+  for(let i=0;i<pts.length;i++){
+    for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){
+        ctx.beginPath();
+        ctx.moveTo(pts[i].x,pts[i].y);
+        ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle=`rgba(160,32,255,${.06*(1-d/120)})`;
+        ctx.lineWidth=.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+function animate(){
+  ctx.clearRect(0,0,W,H);
+  drawConnections();
+  pts.forEach(p=>{p.update();p.draw();});
+  requestAnimationFrame(animate);
+}
+animate();
+
+// ══ CURSOR ══
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function loop(){
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+  rx+=(mx-rx)*.1;ry+=(my-ry)*.1;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,.trat-card,.eq-card,.dep-card,.preco-card,.proc-step').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.classList.add('big'));
+  el.addEventListener('mouseleave',()=>ring.classList.remove('big'));
+});
+
+// ══ NAVBAR ══
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
+
+// ══ REVEAL ON SCROLL ══
+const revObs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('visible'),i*100);
+      revObs.unobserve(e.target);
+    }
+  });
+},{threshold:.08});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(r=>revObs.observe(r));
+
+// ══ PARALLAX HERO ══
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  document.querySelector('.hero-content').style.transform=`translateY(${y*.3}px)`;
+  document.querySelector('.hero-bg-gradient').style.transform=`translateY(${y*.2}px)`;
+});
+
+// ══ FORM ══
+function sendForm(e){
+  const b=e.currentTarget;
+  b.innerHTML='<span>✓ Enviado! Entraremos em contato.</span>';
+  b.style.background='linear-gradient(135deg,#1a6e1a,#2aaa2a)';
+  setTimeout(()=>{
+    b.innerHTML='<span>Agendar Avaliação Gratuita</span>';
+    b.style.background='';
+  },4000);
+}
+
+// = PROCESSO COMPLETO NOIR =
+function changeStep(step) {
+    // 1. Mapeia os elementos do card usando os IDs que criamos
+    const imagemView = document.getElementById('img-processo');
+    const numeroview = document.getElementById('num-processo');
+    const tituloview = document.getElementById('titulo-processo');
+    const textoview = document.getElementById('desc-processo');
+    const dots = document.querySelectorAll('.pdot');
+
+    // 2. Condicionais para trocar as imagens locais da sua pasta e os textos
+    if (step === 1) {
+            imagemView.src = 'CARROSSEL01.jpg';
+            numeroview.innerText = '1';
+            tituloview.innerText = '01 // DIAGNÓSTICO 3D';
+            textoview.innerText = 'Análise facial profunda via IA para identificar as necessidades reais da sua pele.';
+        } 
+        else if (step === 2) {
+            imagemView.src = 'CARROSSEL02.jpg'; // Ajustado para .jfif que está na sua pasta
+            numeroview.innerText = '2';
+            tituloview.innerText = '02 // PROTOCOLO PERSONALIZADO';
+            textoview.innerText = 'Fórmulas exclusivas manipuladas em tempo real para o seu DNA.';
+        } 
+        else if (step === 3) {
+            imagemView.src = 'CARROSSEL3.jpg';  // Esse na sua pasta é .jpg mesmo
+            numeroview.innerText = '3';
+            tituloview.innerText = '03 // APLICAÇÃO PRECISA';
+            textoview.innerText = 'Tecnologia microfluídica para entrega de ativos nas camadas profundas.';
+        } 
+        else if (step === 4) {
+            imagemView.src = 'ACOMPANHAMENTO.jpg'; // Ajustado para .jfif que está na sua pasta
+            numeroview.innerText = '4';
+            tituloview.innerText = '04 // ACOMPANHAMENTO VITALÍCIO';
+            textoview.innerText = 'Monitoramento contínuo para garantir que sua pele permaneça radiante.';
+        }
+    // 3. Atualiza as bolinhas (dots) para a posição certa
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === (step - 1));
+    });
+}
+
+
+</script>
+<a href="https://wa.me/5511919785284?text=Ol%C3%A1%2C%20gostei%20do%20site%20Noir%20Clinic%20e%20quero%20um%20projeto%20exclusivo%20para%20o%20meu%20neg%C3%B3cio!" class="whatsapp-float" target="_blank">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.907h.004c4.368 0 7.926-3.558 7.93-7.93a7.9 7.9 0 0 0-2.327-5.615zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.618-4.954c-.199-.1-.1.179-.382-.255-.284-.429-1.092-2.518-1.188-2.715-.1-.197-.197-.302-.349-.129-.152.174-.582.724-.713.874-.13.15-.262.168-.461.07-.198-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.09-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.1-.425-1.026-.582-1.404-.153-.371-.322-.32-.461-.32-.119-.007-.252-.007-.389-.007-.137 0-.361.051-.55.258-.19.206-.723.708-.723 1.726s.743 2.004.846 2.142c.103.137 1.462 2.23 3.541 3.129.495.213.882.34 1.185.437.499.158.953.135 1.312.083.4-.058 1.23-.504 1.402-1.012.17-.508.17-.943.12-1.034-.05-.09-.18-.142-.38-.243"/>
+    </svg>
+</a>
+</body>
+</html>
